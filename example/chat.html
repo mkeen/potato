@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Potatochat</title>
+  <meta name="description" content="Chat client powered by Potato">
+  <meta name="author" content="Mike Keen">
+	<script src="/handlebars.js"></script>
+	<script src="../couchdb.js"></script>
+	<script src="/object-dom-map/object-dom-map.js"></script>
+</head>
+
+<body>
+	<section id="main">
+		<section id="right">
+			<ul>
+				<script id="UsersOnline" type="text/x-handlebars-template">
+					<li>{{name}}</li>
+				</script>
+			</ul>
+		</section>
+	</section>
+  <script type="text/javascript">
+		coffee = new Server("127.0.0.1", 5984);
+		coffee.database('keen').changes(function(doc) {
+		  console.log(doc)
+		})
+		
+	</script>
+</body>
+</html>
