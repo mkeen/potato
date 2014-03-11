@@ -23,13 +23,13 @@ class Server
     xhr.responseType = 'text'
     if callbacks.load
       xhr.onload = (event) -> callbacks.load eval("(#{this.responseText})")
-      
+
     if callbacks.progress
       lastbytes = 0
       xhr.onprogress = (event) ->
         current_data = event.target.responseText.substr(lastbytes, event.loaded)
         lastbytes = event.loaded
         callbacks.progress eval("(#{current_data})")
-        
+
     xhr.open method, "http://#{@address}:#{@port}#{path}", true
     xhr.send()
