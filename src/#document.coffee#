@@ -1,3 +1,0 @@
-class Document
-  constructor: (@server, @database, @document_json) ->
-  
