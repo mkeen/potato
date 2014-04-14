@@ -19,11 +19,13 @@ Database = (function() {
     var database;
     database = this;
     return this.server.xhr('get', "/" + this.name + "/_changes?feed=continuous", {
-      progress: function(doc) {
-        return database.document(doc.id, function(full_doc) {
-          return callback(full_doc);
-        });
-      }
+      progress: (function(_this) {
+        return function(doc) {
+          return _this.document(doc.id, function(doc) {
+            return callback(doc);
+          });
+        };
+      })(this)
     });
   };
 
@@ -68,26 +70,33 @@ Server = (function() {
   };
 
   Server.prototype.xhr = function(method, path, callbacks) {
-    var lastbytes, xhr;
+    var xhr;
     xhr = new XMLHttpRequest();
     xhr.responseType = 'text';
     if (callbacks.load) {
       xhr.onload = function(event) {
-        return callbacks.load(eval("(" + this.responseText + ")"));
+        return callbacks.load(JSON.parse(this.responseText));
       };
     }
     if (callbacks.progress) {
-      lastbytes = 0;
-      xhr.onprogress = function(event) {
-        var current_data;
-        current_data = event.target.responseText.substr(lastbytes, event.loaded);
-        lastbytes = event.loaded;
-        console.log("current_data");
-        return callbacks.progress(eval("(" + current_data + ")"));
-      };
+      xhr.onprogress = (function(_this) {
+        return function(event) {
+          var response;
+          response = event.target.responseText;
+          if (response.substr(response.length) !== '}') {
+            return console.log(response[response.length - 1]);
+          } else {
+            return console.log(response[response.length - 1]);
+          }
+        };
+      })(this);
     }
     xhr.open(method, "http://" + this.address + ":" + this.port + path, true);
     return xhr.send();
+  };
+
+  Server.prototype.object_cluster_item_list = function(cluster) {
+    return console.log(cluster.split('\n'));
   };
 
   return Server;

@@ -21,11 +21,10 @@
 		</section>
 	</section>
   <script type="text/javascript">
-		coffee = new Server("127.0.0.1", 5984);
+		coffee = new Server("localhost", 5984);
 		coffee.database('keen').changes(function(doc) {
-		  console.log(doc)
-		})
-		
+		  console.log("Mike Keen")
+		});
 	</script>
 </body>
 </html>

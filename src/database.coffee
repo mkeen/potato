@@ -10,6 +10,4 @@ class Database
     database = this
     @server.xhr 'get',
                 "/#{@name}/_changes?feed=continuous",
-                 progress: (doc) ->
-                   database.document doc.id, (full_doc) ->
-                     callback(full_doc)
+                 progress: (doc) => this.document doc.id, (doc) -> callback doc

@@ -22,14 +22,18 @@ class Server
     xhr = new XMLHttpRequest()
     xhr.responseType = 'text'
     if callbacks.load
-      xhr.onload = (event) -> callbacks.load eval("(#{this.responseText})")
+      xhr.onload = (event) -> callbacks.load JSON.parse(this.responseText)
 
     if callbacks.progress
-      lastbytes = 0
-      xhr.onprogress = (event) ->
-        current_data = event.target.responseText.substr(lastbytes, event.loaded)
-        lastbytes = event.loaded
-        callbacks.progress eval("(#{current_data})")
+      xhr.onprogress = (event) =>
+        response = event.target.responseText
+        if response.substr(response.length) != '}'
+          console.log response[response.length - 1]
+        else
+          console.log response[response.length - 1]
 
     xhr.open method, "http://#{@address}:#{@port}#{path}", true
     xhr.send()
+
+  object_cluster_item_list: (cluster) ->
+    console.log cluster.split '\n'
